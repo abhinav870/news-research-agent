@@ -1,40 +1,50 @@
 1) PROJECT ARCHITECTURE:
 
-                 FastAPI
-                     │
-                     ▼
-            LangGraph Workflow
-                     │
-         ┌───────────┴───────────┐
-         ▼                       ▼
-  Load LTM                  Load STM
-         │
-         ▼
-   Validate Request
-         │
-         ▼
-  News Fetch Agent
-         │
-         ▼
-   Deduplicate (utility)
-         │
-         ▼
- News Verify Agent
-         │
-         ▼
-   Rank Results (utility)
-         │
-         ▼
- News Format Agent
-         │
-         ▼
+                  FastAPI
+                      │
+                      ▼
+             LangGraph Workflow
+                      │
+          ┌───────────┴───────────┐
+          ▼                       ▼
+      Load LTM                Load STM
+          │
+          ▼
+    Validate Request
+          │
+          ▼
+     News Fetch Agent
+          │
+          ▼
+ Normalize to NewsArticleCollection
+          │
+          ▼
+ Relevance Filter Agent (LLM)
+ (score + reason + reject/accept )
+          │
+          ▼
+   Filter Irrelevant News
+          │
+          ▼
+   Deduplicate (Utility)
+          │
+          ▼
+  Verify News Agent
+          │
+          ▼
+Rank Results (Utility)
+          │
+          ▼
+   News Format Agent
+          │
+          ▼
  Update LTM (LLM + Repository)
-         │
-         ▼
+          │
+          ▼
       Save STM
-         │
-         ▼
-         END
+          │
+          ▼
+          END
 
 
 2) PREOJECT FILES HEIRARCHY:
