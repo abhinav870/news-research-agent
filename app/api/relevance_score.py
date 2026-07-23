@@ -3,11 +3,13 @@ from app.schemas.schemas import *
 
 from app.prompts.prompts import RELEVANCE_SYSTEM_PROMPT
 from app.llms.llms import llm_groq
+from app.api.fetch_news import fetch_news
 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
-from dotenv import load_dotenv
 
+from dotenv import load_dotenv
+from pprint import pprint
 load_dotenv()
 
 def build_article_context(news: NewsArticleCollection) -> str:
@@ -32,30 +34,8 @@ def build_article_context(news: NewsArticleCollection) -> str:
     return "\n".join(res)
 
 
-
-"""
-
-[
-    {
-        article_id: "abc",
-        relevance_score: 9.5,
-        keep: True,
-        reason: "Directly discusses a recent AI model."
-    },
-
-    {
-        article_id: "xyz",
-        relevance_score: 2.0,
-        keep: False,
-        reason: "Sports article with only a passing mention of AI."
-    }
-]
-
-"""
-
 def filter_news(request: NewsRequest, news: NewsArticleCollection) -> RelevanceAssessmentCollection:
 
-    
     context = build_article_context(news)
     topic = request.topic
     duration = request.duration
@@ -91,3 +71,21 @@ def filter_news(request: NewsRequest, news: NewsArticleCollection) -> RelevanceA
     })
 
     return response
+
+if __name__== "__main__":
+
+    request = NewsRequest(
+        topic="Artificial Intelligence",
+        duration="latest",
+        format="short"
+    )
+
+    news = fetch_news(request)
+
+    pprint(type(news))
+    pprint(news)
+
+    print("*"*100)
+
+    assessment = filter_news(request, news)
+    pprint(assessment.model_dump_json(indent=4))

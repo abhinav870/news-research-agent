@@ -1,3 +1,8 @@
 venv
 .env
 app/llms/__pycache__/llms.cpython-312.pyc
+app/llms/__pycache__/llms.cpython-312.pyc
+app/api/__pycache__/relevance_score.cpython-312.pyc
+app/api/__pycache__/fetch_news.cpython-312.pyc
+app/schemas/__pycache__/schemas.cpython-312.pyc
+        

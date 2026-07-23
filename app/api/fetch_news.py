@@ -3,7 +3,7 @@ import os
 import requests
 
 from dotenv import load_dotenv
-from app.schemas.schemas import NewsRequest
+from app.schemas.schemas import NewsRequest, NewsArticle, NewsArticleCollection
 from pprint import pprint
 
 load_dotenv()
@@ -11,6 +11,24 @@ load_dotenv()
 # NewsData.io endpoint
 BASE_URL = "https://newsdata.io/api/1/latest"
 
+def parse_news(raw_json: dict) -> NewsArticleCollection:
+    articles = []
+
+    for article in raw_json["results"]:
+        articles.append(
+            NewsArticle(
+                article_id=article["article_id"],
+                headline=article["title"],
+                summary=article["description"],
+                source=article["source_name"],
+                author=article.get("creator"),
+                url=article["link"],
+                published_at=article["pubDate"],
+                raw_text=f"{article['title']}\n\n{article['description']}"
+            )
+        )
+
+    return NewsArticleCollection(articles=articles)
 
 def fetch_news(request: NewsRequest):
 
@@ -41,7 +59,8 @@ def fetch_news(request: NewsRequest):
 
     response = requests.get(BASE_URL, params=params, timeout=30)
     raw_json = response.json()
-    return raw_json
+
+    return parse_news(raw_json)
 
 if __name__ == "__main__":
 
