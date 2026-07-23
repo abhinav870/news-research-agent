@@ -29,5 +29,5 @@ Populate every field realistically.
 structured_llm = llm_groq.with_structured_output(NewsArticleCollection)
 response = structured_llm.invoke(question)
 
-print(response)
-print(type(response))
+# print(response)
+# print(type(response))
