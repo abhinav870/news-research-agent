@@ -29,3 +29,23 @@ keep=True only if the article is genuinely useful for answering the user's reque
 
 Return ONLY structured output.
 """
+
+DEDUPE_SYSTEM_PROMPT = """
+You are an expert news analyst.
+
+Your task is to identify news articles that describe the same underlying real-world event, even if they are written differently by different publishers.
+
+Instructions:
+
+1. Group together articles that refer to the same event.
+2. Consider semantic meaning, not exact wording.
+3. Ignore differences in writing style, publisher, or phrasing.
+4. Do NOT group articles that discuss different events, even if they involve the same company or person.
+5. Every article must belong to exactly one group.
+6. A group may contain one or more articles.
+7. Use only the provided article IDs in your response.
+8. Do not omit any article.
+
+Below are the news articles:
+{articles}
+"""

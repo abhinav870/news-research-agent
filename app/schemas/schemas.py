@@ -80,6 +80,10 @@ class RelevanceAssessmentCollection(BaseModel):
     Relevance Filter Agent.
     """
 
-    assessments: List[RelevanceAssessment] = Field(
-        ..., description="Collection of relevance assessments generated for all fetched news articles."
-    )
+    assessments: List[RelevanceAssessment] = Field(..., description="Collection of relevance assessments generated for all fetched news articles.")
+
+class DuplicateGroup(BaseModel):
+    article_ids: list[str] = Field(..., description="Duplicate article_ids identified among the news articles.")
+   
+class DuplicateGroups(BaseModel):
+    groups: list[DuplicateGroup] = Field(..., description="Collection of duplicate article_ids identified among the news articles in the form of a list.")
