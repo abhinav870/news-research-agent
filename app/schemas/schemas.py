@@ -42,6 +42,15 @@ class RelevanceAssessment(BaseModel):
         description="Unique identifier of the news article being evaluated. This should match the article_id in the corresponding NewsArticle object."
     )
 
+    topic_relation: Literal["DIRECT", "INDIRECT", "UNRELATED"] = Field(...,
+        description=(
+            "Relationship between the requested topic and the article.\n"
+            "DIRECT: The requested topic is the primary focus.\n"
+            "INDIRECT: The requested topic is discussed only as a supporting or secondary aspect.\n"
+            "UNRELATED: The requested topic is absent or only casually mentioned."
+        )
+    )
+
     relevance_score: float = Field(
         ge=0.0,
         le=10.0,
@@ -80,7 +89,14 @@ class DuplicateGroup(BaseModel):
     Represents the duplicate article_ids identified among the news articles.
     """
 
-    article_ids: list[str] = Field(..., description="Duplicate article_ids identified among the news articles.")
+    article_ids: list[str] = Field(...,  description="IDs of articles describing the same underlying news event.")
+    canonical_headline: str = Field(description="Representative headline describing the shared event.")
+    duplicate_reason: str = Field(
+        description=(
+            "Brief explanation of why these articles are duplicates. "
+            "The explanation should identify the common news event."
+        )
+    )
    
 class DuplicateGroups(BaseModel):
     """

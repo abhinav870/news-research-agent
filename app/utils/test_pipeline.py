@@ -1,3 +1,5 @@
+import nt
+
 from app.schemas.schemas import *
 
 from app.api.fetch_news import fetch_news
@@ -8,6 +10,7 @@ from app.utils.deduplicate import deduplicate_news
 from app.utils.filter_relevant_news import filter_relevant_news
 from app.utils.filter_relevant_verified_news import filter_verified_news
 from app.utils.re_ranking import rerank_articles
+from app.utils.formatter import format_and_save_news
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -77,7 +80,7 @@ def main():
     # )
 
     request = NewsRequest(
-        topic="Artificial Intelligence",
+        topic="Indian Politics",
         duration="latest",
         format="long",
     )
@@ -199,6 +202,13 @@ def main():
         print(f"{idx}. {article.headline}")
 
     print()
+
+    output_path = format_and_save_news(
+        request=request,
+        news_collection=reranked_news,
+    )
+
+    print(f"\nMarkdown report saved to: {output_path}")
 
    ####################################################################
     # Assertions
