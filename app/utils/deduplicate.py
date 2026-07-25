@@ -1,5 +1,5 @@
 from app.schemas.schemas import *
-from app.prompts.prompts import DUPLICATE_SYSTEM_PROMPT
+from app.prompts.prompts import DEDUPE_SYSTEM_PROMPT
 from app.llms.llms import llm_groq
 
 from dotenv import load_dotenv
@@ -8,7 +8,7 @@ from langchain_core.prompts import ChatPromptTemplate
 
 load_dotenv()
 
-def deduplicate_news(news_collection: NewsArticleCollection) -> NewsArticleCollection:
+def deduplicate_news(news_collection: NewsArticleCollection, assessment_collection: RelevanceAssessmentCollection) -> NewsArticleCollection:
     """
     1) Deduplicate news articles based on their headlines and summary.
     2) Fetch the article ids of the duplicate articles and group them together.
@@ -16,22 +16,26 @@ def deduplicate_news(news_collection: NewsArticleCollection) -> NewsArticleColle
     4) Return a new NewsArticleCollection containing only the deduplicated articles.
     """
 
+    # Create a lookup dictionary for relevance scores based on article_id by iterating over assessment_collection.assessments.
+    score_lookup = {}
+    for assessment in assessment_collection.assessments:
+        score_lookup[assessment.article_id] = assessment.relevance_score
+
     articles = []
     for article in news_collection.articles:
-
         articles.append(
             {
                 "article_id": article.article_id,
                 "headline": article.headline,
                 "summary": article.summary,
-                "relevance_score": article.relevance_score          
+                "relevance_score": score_lookup[article.article_id]
             }
         )
 
     llm_structured_output = llm_groq.with_structured_output(DuplicateGroups)
     prompt = ChatPromptTemplate.from_messages(
         [   
-            ('system',DUPLICATE_SYSTEM_PROMPT),
+            ('system', DEDUPE_SYSTEM_PROMPT),
             (
                 'human',
                 """ 
@@ -61,7 +65,8 @@ def deduplicate_news(news_collection: NewsArticleCollection) -> NewsArticleColle
             if article.article_id in curr_grp_ids:
                 group_articles.append(article)
 
-        best_article = max(group_articles, key = lambda x: x.relevance_score) # Fetch the best article based on the highest relevance score
+        # best_article = max(group_articles, key = lambda x: x.relevance_score) # Fetch the best article based on the highest relevance score
+        best_article = max(group_articles, key=lambda article: score_lookup.get(article.article_id, 0.0)) # Fetch the best article based on the highest relevance score
         deduplicated_articles.append(best_article)
 
     return NewsArticleCollection(articles=deduplicated_articles)

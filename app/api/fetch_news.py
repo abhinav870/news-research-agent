@@ -14,17 +14,28 @@ BASE_URL = "https://newsdata.io/api/1/latest"
 def parse_news(raw_json: dict) -> NewsArticleCollection:
     articles = []
 
-    for article in raw_json["results"]:
+    for article in raw_json.get("results", []):
+
+        title = article.get("title")
+        description = article.get("description")
+        link = article.get("link")
+        source = article.get("source_name")
+        pub_date = article.get("pubDate")
+        article_id = article.get("article_id")
+
+        if not all([article_id, title, description, link, source, pub_date]):
+            continue
+
         articles.append(
             NewsArticle(
-                article_id=article["article_id"],
-                headline=article["title"],
-                summary=article["description"],
-                source=article["source_name"],
+                article_id=article_id,
+                headline=title,
+                summary=description,
+                source=source,
                 author=article.get("creator"),
-                url=article["link"],
-                published_at=article["pubDate"],
-                raw_text=f"{article['title']}\n\n{article['description']}"
+                url=link,
+                published_at=pub_date,
+                raw_text=f"{title}\n\n{description}",
             )
         )
 
