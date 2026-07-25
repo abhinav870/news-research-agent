@@ -47,7 +47,7 @@ Rank Results (Utility)
           END
 
 
-2) PREOJECT FILES HEIRARCHY:
+2) PROJECT FILES HEIRARCHY:
 
 news-research-agent/
 │

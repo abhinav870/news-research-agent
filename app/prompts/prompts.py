@@ -131,7 +131,7 @@ Important Instructions:
 
 #######################################################################################################################################################
 
-RANKING_SYSTEM_PROMPT = """
+RE_RANKING_SYSTEM_PROMPT = """
 You are an expert News Editor responsible for prioritizing and ranking news articles for end users.
 
 Your objective is to rank the provided news articles from the most valuable to the least valuable for the user's request.
@@ -256,6 +256,16 @@ Return ONLY the structured output.
 Do NOT include markdown.
 Do NOT include additional commentary.
 Do NOT explain your reasoning outside the structured response.
+
+----------------------------------------
+Important Note:
+----------------------------------------
+
+Do not rank primarily by the provided relevance and credibility scores.
+Use them as supporting signals only. 
+Compare all articles holistically based on news importance, public impact, novelty, and expected user value.
+It is acceptable for an article with a lower relevance score to receive a higher rank if its overall significance is greater.
+
 """
 
 #######################################################################################################################################################

@@ -123,3 +123,46 @@ class VerificationAssessmentCollection(BaseModel):
     """
 
     assessments: list[VerificationAssessment] = Field(..., description="Collection of verification assessments in the form of a list.")
+
+class RankedArticle(BaseModel):
+    """
+    Ranking assigned to a single news article.
+    """
+
+    article_id: str = Field(
+        description="Unique identifier of the news article."
+    )
+
+    rank: int = Field(
+        ge=1,
+        description="Final rank assigned to the article. Rank 1 is the highest priority."
+    )
+
+    importance_score: float = Field(
+        ge=0,
+        le=10,
+        description=(
+            "Estimated importance of the news event on a scale from 0 to 10.\n\n"
+            "Score Interpretation:\n"
+            "9.0 - 10.0 : Extremely Important - A globally significant event with major impact that is highly valuable to almost all users.\n"
+            "7.0 - 8.9 : Highly Important - A major development within the requested topic that is likely to interest most users.\n"
+            "5.0 - 6.9 : Moderately Important - A meaningful update with moderate impact or niche significance.\n"
+            "3.0 - 4.9 : Minor Importance - A relatively small development with limited impact or audience.\n"
+            "0.0 - 2.9 : Low Importance - Routine, repetitive, or low-impact information with little value to most users."
+        )
+    )
+
+    ranking_reason: str = Field(
+        description=(
+            "Brief explanation (1-2 sentences) describing why this article "
+            "received its assigned rank."
+        )
+    )
+
+
+class RankedArticleCollection(BaseModel):
+    """
+    Rankings generated for all news articles.
+    """
+
+    rankings: list[RankedArticle] = Field(description="Rankings assigned to all input news articles.")

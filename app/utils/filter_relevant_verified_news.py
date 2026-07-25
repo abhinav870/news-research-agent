@@ -9,7 +9,8 @@ def filter_verified_news(news_collection: NewsArticleCollection, assessment_coll
 
     article_ids = set()
     for assessment in assessment_collection.assessments:
-        if assessment.keep and assessment.credibility_score >=7.0:
+        if assessment.keep and assessment.credibility_score >=6.0:
+        # if assessment.keep:
             article_ids.add(assessment.article_id)
 
     articles = []
