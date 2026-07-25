@@ -2,7 +2,6 @@ from typing import Literal, List
 from pydantic import BaseModel, Field, HttpUrl
 from datetime import datetime
 
-
 class NewsRequest(BaseModel):
     """
     Structured representation of the user's news request.
@@ -11,7 +10,6 @@ class NewsRequest(BaseModel):
     topic: str = Field(..., description = "The topic or domain the user wants news about. Example: AI, Cricket, Politics, Education.")
     duration: Literal["latest", "today", "last_week", "last_month", "over_the_years"] = Field(default = "latest", description = "Time period over which news should be fetched.")
     format: Literal["short", "medium", "long"] = Field(..., description = "Desired length of the final news summary.")
-
 
 class NewsArticle(BaseModel):
     """
@@ -28,14 +26,12 @@ class NewsArticle(BaseModel):
     published_at: datetime = Field(..., description="Date and time when the news article was originally published.")
     raw_text: str = Field(..., description="Original unmodified text exactly as fetched from the news provider.")
 
-
 class NewsArticleCollection(BaseModel):
     """
     Represents a collection of news articles returned by the News Fetch Agent.
     """
 
     articles: List[NewsArticle] = Field(..., description="List of fetched news articles.")
-
 
 class RelevanceAssessment(BaseModel):
     """
@@ -102,7 +98,12 @@ class VerificationAssessment(BaseModel):
     article_id: str = Field(
         description="Unique identifier of the news article being evaluated. This should match the article_id in the corresponding NewsArticle object."
     )
-    credibility_score: float = Field(ge=0,le=10, description="Credibility score assigned by the verification process.")
+    credibility_score: float = Field(ge=0.0,le=10.0, description="Credibility score assigned by the verification process." 
+        "0.0 - 2.0 = Very Unreliable."
+        "3.0 - 5.0 = Somewhat Unreliable."
+        "6.0 - 8.0 = Reasonably Trustworthy."
+        "9.0 - 10.0 = Highly Trustworthy."
+    )
 
     keep: bool = Field(
         description=(
@@ -122,4 +123,3 @@ class VerificationAssessmentCollection(BaseModel):
     """
 
     assessments: list[VerificationAssessment] = Field(..., description="Collection of verification assessments in the form of a list.")
-

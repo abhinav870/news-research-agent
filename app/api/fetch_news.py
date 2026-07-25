@@ -72,16 +72,3 @@ def fetch_news(request: NewsRequest):
     raw_json = response.json()
 
     return parse_news(raw_json)
-
-if __name__ == "__main__":
-
-    request = NewsRequest(
-        # topic="Artificial Intelligence",
-        # topic = "International Men's Cricket",
-        topic = "Indian Politics",
-        duration="latest",
-        format="short"
-    )
-
-    response = fetch_news(request)
-    pprint(response)
