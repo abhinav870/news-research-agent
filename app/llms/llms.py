@@ -13,8 +13,9 @@ llm_model = HuggingFaceEndpoint(
 llm_hf = ChatHuggingFace(llm=llm_model)
 
 llm_groq = ChatGroq(
-    # model="llama-3.3-70b-versatile",
-    model = "llama-3.1-8b-instant",
+    model="llama-3.3-70b-versatile",
+    # model = "llama-3.1-8b-instant",
+    # model = "openai/gpt-oss-120b",
     temperature=0,
     max_tokens=1000,
 )

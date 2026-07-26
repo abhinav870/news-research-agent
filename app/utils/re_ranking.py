@@ -2,16 +2,14 @@ from app.llms.llms import *
 from app.prompts.prompts import *
 from app.llms.llms import llm_groq
 
+from rapidfuzz import fuzz
+from datetime import timedelta
 from langchain_core.prompts import ChatPromptTemplate
 
 from dotenv import load_dotenv
 load_dotenv()
 
-def build_reranking_context(
-            news: NewsArticleCollection,
-            relevance_assessments: RelevanceAssessmentCollection,
-            verification_assessments: VerificationAssessmentCollection
-) -> str:
+def build_reranking_context(news: NewsArticleCollection, relevance_assessments: RelevanceAssessmentCollection, verification_assessments: VerificationAssessmentCollection) -> str:
     
     """
     1) Build a string representation of the news articles to be used as context for the LLM.
@@ -53,11 +51,7 @@ def build_reranking_context(
     return "\n".join(res)
 
 
-def rerank_articles(request: NewsRequest,
-                    news: NewsArticleCollection,
-                    relevance_assessments: RelevanceAssessmentCollection,
-                    verification_assessments: VerificationAssessmentCollection
-                    ) -> NewsArticleCollection:
+def rerank_articles(request: NewsRequest, news: NewsArticleCollection, relevance_assessments: RelevanceAssessmentCollection, verification_assessments: VerificationAssessmentCollection ) -> NewsArticleCollection:
     """
     1) Generate rank for each news article with respect to the user's news request, relevance_score and credibility_score.
     2) Firstly, get the context of the news articles to be used as input for the LLM (i.e. article_id, headline, summary, source, relevance_score and credibility_score).

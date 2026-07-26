@@ -80,9 +80,9 @@ def main():
     # )
 
     request = NewsRequest(
-        topic="Indian Politics",
+        topic="International Men's Cricket",
         duration="latest",
-        format="long",
+        format="long"
     )
 
     ####################################################################

@@ -61,20 +61,19 @@ news-research-agent/
 │   │
 │   ├── api/
 │   │   ├── app.py                  # FastAPI application
-│   │   ├── routes.py               # API endpoints
-│   │   ├── request_models.py
-│   │   └── response_models.py
+│   │   ├── fetch_news.py               # API endpoints
+│   │   ├── relevance_score.py
+│   │   └── verification.py
 │   │
 │   ├── graph/
 │   │   ├── builder.py              # Builds LangGraph
 │   │   ├── state.py                # NewsState
 │   │   ├── nodes.py                # Utility nodes
-│   │   └── edges.py                # Conditional routing (if needed)
 │   │
 │   ├── agents/
-│   │   ├── fetch_agent.py
-│   │   ├── verify_agent.py
-│   │   └── format_agent.py
+│   │   ├── 
+│   │   ├── 
+│   │   └── 
 │   │
 │   ├── memory/
 │   │   ├── load_memory.py          # Load LTM
@@ -84,43 +83,28 @@ news-research-agent/
 │   │   └── memory_models.py
 │   │
 │   ├── llms/
-│   │   ├── provider.py             # LLM factory
-│   │   ├── groq.py
-│   │   └── huggingface.py
+│   │   ├── llms.py             # LLM factory
 │   │
 │   ├── prompts/
-│   │   ├── fetch_prompt.py
-│   │   ├── verification_prompt.py
-│   │   ├── formatting_prompt.py
-│   │   └── memory_prompt.py
+│   │   ├── prompts.py
 │   │
 │   ├── schemas/
-│   │   ├── request_schema.py
-│   │   ├── fetched_news.py
-│   │   ├── verified_news.py
-│   │   ├── formatted_news.py
-│   │   ├── memory_schema.py
-│   │   └── state_schema.py
-│   │
-│   ├── services/
-│   │   ├── twitter_service.py
-│   │   ├── verification_service.py
-│   │   └── ranking_service.py
+│   │   ├── schemas.py
 │   │
 │   ├── utils/
-│   │   ├── parser.py
-│   │   ├── deduplicator.py
-│   │   ├── logger.py
-│   │   ├── constants.py
-│   │   └── helpers.py
+│   │   ├── deduplicate.py
+│   │   ├── filter_relevant_news.py
+│   │   ├── filter_relevant_verified_news.py
+│   │   ├── formatter.py
+│   │   └── re_ranking.py
 │   │
 │   ├── config/
-│   │   ├── settings.py
-│   │   └── langsmith.py
+│   │   ├── 
+│   │   └── 
 │   │
 │   └── database/
-│       ├── news_memory.db
-│       └── init_db.py
+│       ├── 
+│       └── 
 │
 ├── tests/
 │   ├── test_fetch_agent.py

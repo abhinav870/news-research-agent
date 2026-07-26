@@ -1,5 +1,7 @@
 from pathlib import Path
 from datetime import datetime
+from datetime import datetime
+import re
 
 from app.schemas.schemas import NewsRequest, NewsArticleCollection
 
@@ -47,24 +49,41 @@ def format_news(request: NewsRequest, news_collection: NewsArticleCollection ) -
     return "\n".join(markdown)
 
 
-def save_markdown(markdown_content: str, file_name: str = "news_report.md", output_dir: str = "outputs") -> Path:
+def save_markdown(markdown_content: str, topic: str, output_dir: str = "outputs" ) -> Path:
     """
     Saves markdown content to disk.
+
+    File name format:
+    <topic_name>_<YYYYMMDD_HHMMSS>.md
     """
 
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
+    # Sanitize topic
+    topic = topic.strip()
+    topic = re.sub(r"\s+", "_", topic)
+    topic = re.sub(r"[^A-Za-z0-9_-]", "", topic)
+
+    # Current timestamp
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    file_name = f"{topic}_{timestamp}.md"
     file_path = output_path / file_name
     file_path.write_text(markdown_content, encoding="utf-8")
 
     return file_path
 
 
-def format_and_save_news(request: NewsRequest, news_collection: NewsArticleCollection, file_name: str = "news_report.md", output_dir: str = "outputs") -> Path:
+def format_and_save_news(request: NewsRequest, news_collection: NewsArticleCollection, output_dir: str = "outputs") -> Path:
     """
     Formats the news and saves it as a Markdown file.
     """
 
     markdown = format_news(request, news_collection)
-    return save_markdown(markdown_content=markdown, file_name=file_name, output_dir=output_dir)
+
+    return save_markdown(
+        markdown_content=markdown,
+        topic=request.topic,
+        output_dir=output_dir
+    )
